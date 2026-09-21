@@ -1,0 +1,31 @@
+# 构建产物
+__pycache__/
+*.pyc
+node_modules/
+target/
+build/
+dist/
+
+# IDE 配置（保留可共享的 VS Code 配置）
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+!.vscode/tasks.json
+!.vscode/launch.json
+
+# 系统文件
+.DS_Store
+Thumbs.db
+
+# 环境配置（process.env 是运行时对象，对应忽略 .env）
+.env
+.env.*
+.venv/
+
+# Office 临时文件
+~$*.docx
+
+# 数据库文件
+*.db
+*.sqlite
