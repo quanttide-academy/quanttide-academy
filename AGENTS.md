@@ -24,7 +24,7 @@ quanttide-training/
 │   └── specification/                 # Specification（工程标准）
 │       ├── repo-naming.md
 │       └── todo.md
-└── packages/                          # Toolkit（工作所需 skill 与脚本）
+└── .agent/                            # Toolkit（工作所需 skill 与脚本）
     └── md-writer/
         └── SKILL.md
 ```
@@ -48,7 +48,7 @@ quanttide-training/
 1. **理解需求**：明确请求范围，只改被要求的文件
 2. **查契约**：读 README 确认入口；读 `docs/specification/repo-naming.md` 确认落点
 3. **检查现状**：目标路径是否已存在；不预建未使用的目录
-4. **执行操作**：工具放 `packages/{工具短名}/`；已有正文用相对链接，不抄写
+4. **执行操作**：工具放 `.agent/{工具短名}/`；已有正文用相对链接，不抄写
 5. **结构同步**：若改名或变更目录，同一轮更新 README「仓库结构」、本文「项目目录」与内部链接
 6. **验证结果**：按下方清单逐项核对
 

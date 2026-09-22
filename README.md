@@ -47,5 +47,7 @@ quanttide-training/
 │   └── specification/
 │       ├── repo-naming.md           # 仓库命名规范
 │       └── todo.md                  # 任务清单规范
-└── packages/                        # 可复用工具仓
+└── .agent/                          # 可复用工具
+    └── md-writer/
+        └── SKILL.md
 ```
