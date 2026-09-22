@@ -14,7 +14,7 @@
 quanttide-training/
 ├── README.md
 ├── AGENTS.md
-├── todo.md
+├── roadmap.md
 ├── .gitignore
 ├── docs/                              # 程序型记忆
 │   ├── bylaw/                         # Bylaw（工作章程）
@@ -33,7 +33,7 @@ quanttide-training/
 - `docs/bylaw/实训基地章程.md`：实训基地章程
 - `docs/specification/repo-naming.md`：命名与落点的唯一契约
 - `docs/handbook/co-guide.md`：完整协作流程
-- `todo.md`：当前可领取的任务清单
+- `roadmap.md`：当前可领取的任务清单
 
 ## 核心原则
 

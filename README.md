@@ -19,7 +19,7 @@ date: 2026-09-22
 6. 明确本仓库结构
    - [仓库结构](#仓库结构)
    - [仓库命名规范](./docs/specification/repo-naming.md)
-7. [如何领取任务](./todo.md) 
+7. [如何领取任务](./roadmap.md) 
 8. [如何发布任务](./docs/handbook/co-guide.md#发布任务)
 9. [完整协作流程（待打磨）](./docs/handbook/co-guide.md)
 
@@ -37,7 +37,7 @@ date: 2026-09-22
 quanttide-training/
 ├── README.md                        # 人类阅读入口
 ├── AGENTS.md                        # AI 工作指南
-├── todo.md                          # 任务清单
+├── roadmap.md                       # 任务清单
 ├── .gitignore
 ├── docs/
 │   ├── bylaw/
