@@ -23,7 +23,7 @@ quanttide-training/
 │   │   └── co-guide.md
 │   └── specification/                 # Specification（工程标准）
 │       ├── repo-naming.md
-│       └── todo.md
+│       └── roadmap-template.md
 └── .agent/                            # Toolkit（工作所需 skill 与脚本）
     └── md-writer/
         └── SKILL.md

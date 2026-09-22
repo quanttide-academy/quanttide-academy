@@ -39,7 +39,7 @@ flowchart LR
 
 ## 发布任务
 
-1. 把 [任务清单模板](../specification/todo.md) 投喂给 AI，按模板生成一个 `##` 条目。相对路径是 `../specification/todo.md`。
+1. 把 [任务清单模板](../specification/roadmap-template.md) 投喂给 AI，按模板生成一个 `##` 条目。相对路径是 `../specification/roadmap-template.md`。
 2. 只改 [任务清单](../../roadmap.md)，把该条目追加进去，不要改规范或其他文件。
 3. 对本仓库开 PR，请 [管理员] 和 [审核员] 按[初审流程(未写入)](#初审流程)审阅。
 4. 合并后该条目才进入可领取任务中。
