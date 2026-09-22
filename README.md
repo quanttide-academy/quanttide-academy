@@ -14,7 +14,7 @@ date: 2026-09-22
 1. [了解量潮](https://strategy.quanttide.com/)；
 2. [了解实训基地](./docs/bylaw/实训基地章程.md)
 3. 学习 Markdown 语法（未写入 
-4. [学习 Git 工作流（待完善）](./docs/handbook/git-workflow.md)
+4. [学习 Git 工作流（待完善）](./docs/tutorial/git-workflow.md)
 5. 学习如何使用 Cursor（未写入）
 6. 明确本仓库结构
    - [仓库结构](#仓库结构)
@@ -44,9 +44,11 @@ quanttide-training/
 │   │   └── 实训基地章程.md            # 工作章程
 │   ├── handbook/
 │   │   └── co-guide.md              # 协作流程
-│   └── specification/
-│       ├── repo-naming.md           # 仓库命名规范
-│       └── roadmap-template.md      # 任务清单规范
+│   ├── specification/
+│   │   ├── repo-naming.md           # 仓库命名规范
+│   │   └── roadmap-template.md      # 任务清单规范
+│   └── tutorial/
+│       └── git-workflow.md          # Git 工作流
 └── .agent/                          # 可复用工具
     └── md-writer/
         └── SKILL.md

@@ -21,9 +21,11 @@ quanttide-training/
 │   │   └── 实训基地章程.md
 │   ├── handbook/                      # Handbook（工作手册）
 │   │   └── co-guide.md
-│   └── specification/                 # Specification（工程标准）
-│       ├── repo-naming.md
-│       └── roadmap-template.md
+│   ├── specification/                 # Specification（工程标准）
+│   │   ├── repo-naming.md
+│   │   └── roadmap-template.md
+│   └── tutorial/                      # Tutorial（工作教程）
+│       └── git-workflow.md
 └── .agent/                            # Toolkit（工作所需 skill 与脚本）
     └── md-writer/
         └── SKILL.md
