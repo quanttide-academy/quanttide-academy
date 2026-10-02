@@ -1,0 +1,209 @@
+> 本页从课题仓协作包迁移到实训基地第二大脑，供全员复用。
+> 产品代码仍在 `hongwei-2026/product-requirement-loop`。
+
+# 审核员指南（必审人专用）
+
+> **读者**：@hongwei-2026 · @hl019 · @Jerrybao99 · @likexin105  
+> **不是**给实训同学看的接任务说明（同学看 [实训基地协作指南.md](./实训基地协作指南.md)）。  
+> 本文只回答：**你怎么审、审什么、流水红了怎么办、何时 `/approve` / `/reject`**。
+
+---
+
+## 1. 你的职责边界
+
+| 角色 | 做什么 | 不做什么 |
+|------|--------|----------|
+| 必审人（你） | 对 **Design / Impl PR** 做内容审查；名单内每人评论 **`/approve`** 后门禁才绿 | 代替维护者 `/accept`（仅 @hongwei-2026） |
+| 维护者 | **先 Merge Design PR**，再 `/accept @user`、`/reject-claim`、合并实现、`/score`、改分支保护 | — |
+| Actions | 自动拦：密钥、门禁脚本、交付物缺失、未锁定就抢实现等 | 不替代你的产品判断 |
+
+合并前必须同时满足：
+
+1. **CI**（`CI / Strict delivery + security gates`）绿  
+2. **企业级 PR 套件**（见下文）相关检查绿  
+3. **必审人门禁**：每位必审人（作者除外）对 **当前 head** 在 PR 评论发 `/approve`  
+4. 你认为方案/实现可上主分支  
+
+### 怎么「通过」（必看）
+
+在 **PR 评论**单独一行发送：
+
+```text
+/approve
+```
+
+| 命令 | 含义 |
+|------|------|
+| `/approve` | 同意 **当前 head**（同义：`/lgtm`） |
+| `/reject` | 反对或撤回通过（同义：`/changes`） |
+
+规则：
+
+- **每人一条有效票**；以该账号最新一条 `/approve` 或 `/reject` 为准  
+- **作者不能给自己 `/approve`**（自动排除）  
+- **新 push 后旧票作废**，必须再发一次 `/approve`  
+- 点 GitHub 的 Approve 按钮 **不计入**本门禁（以评论命令为准）
+
+---
+
+## 2. 两类 PR：怎么认、审什么
+
+开 PR 时作者应选模板：**Design** 或 **Implementation**（见 GitHub「Compare & pull request」模板选择）。
+
+### 2.1 Design PR（方案，未授权实现）
+
+| 项 | 期望 |
+|----|------|
+| 标题 | `[Design] #<issue> …` |
+| 分支 | `design/#<issue>-…` |
+| **提交位** | 必须在仓库新增/更新 `docs/designs/#<issue>-*.md`（见 [../designs/README.md](../designs/README.md)） |
+| 正文 | Related to #N；方案摘要 / 影响面 / 验收 / 风险 |
+| 代码量 | **禁止**大段完整实现；可有接口草图、伪代码、状态图 |
+
+**你怎么审 Design**
+
+- [ ] 问题是否对准 Issue 目标，有没有 scope creep  
+- [ ] 是否写清「不改什么」（尤其 Step3 门禁、待审库 cancel、密钥）  
+- [ ] `docs/designs/#N-…md` 是否可读、能否作为实现合同  
+- [ ] 同学是否已邮件 `feizi_050920@qq.com`（可在 PR 勾选或回复确认）  
+- `/approve` Design ≠ 允许直接合实现；实现仍须维护者 `/accept`  
+- **PR 作者若是必审人**：不能给自己 `/approve`；其余必审人发 `/approve` 即可  
+- **Fork PR**：AI 清单可评论；必审以 Checks 为准  
+
+Design 可先合入 `docs/designs/`（方案入库），也可只 `/approve` 留待实现一并合——以维护者当次约定为准；默认：**Design 合入 designs 文档即可**。
+
+### 2.2 Implementation PR（实现）
+
+| 项 | 期望 |
+|----|------|
+| 标题 | `[Impl] #<issue> …` |
+| 分支 | `feat/#<issue>-…` |
+| 正文 | **`Fixes #<issue>`** |
+| 作者 | 必须是 Issue Assignee（已 `/accept`） |
+| **交付三件套** | ① 代码 ② **演示视频公网链接** ③ **截图 ≥2**（贴在 PR 正文） |
+
+**你怎么审 Impl（建议顺序）**
+
+1. 看企业级检查评论 / Checks：交付物、锁定、密钥是否已绿  
+2. 打开视频（2～5 分钟应能看懂路径）；对照截图  
+3. 看 diff：是否落实 Design；有无破坏 `verify_*` / Step3 / cancel  
+4. 本地有疑点再拉分支；无疑点可直接评论 `/approve` 或 `/reject`（写清理由）  
+
+**缺视频或缺截图 → 不要 `/approve`**，评论要求补齐后让作者 `/recheck`。
+
+---
+
+## 3. 企业级流水（Checks）一览
+
+多人并行时，靠流水分流，减少你肉眼漏检。
+
+| Check / Workflow | 作用 | 红了你怎么处理 |
+|------------------|------|----------------|
+| `CI / Strict delivery + security gates` | 仓库级交付文件、密钥、bandit、lessons… | 让作者修 CI；勿强行合 |
+| `Enterprise PR / classify` | 自动打 `type:design` / `type:implementation` | 标题不规范时纠正作者 |
+| `Enterprise PR / delivery-artifacts` | Impl：检测视频 URL + 截图标记 | 要求补 PR 正文后 `/recheck` |
+| `Enterprise PR / design-gate` | Design：检测 `docs/designs/#N-*.md` 与必填章节 | 要求补设计文档 |
+| `Enterprise PR / scope-guard` | 超大 PR / 乱碰工作流告警 | 要求拆 PR 或说明 |
+| `Enterprise PR / task-lock` | Impl 作者须为 Assignee | 未 `/accept` 则拒，转告维护者 |
+| `Required reviewers / all-reviewers` | 必审人全员 `/approve` | 缺谁就 @ 谁发命令 |
+| `Task board`（Issue 评论） | `/claim` `/accept` `/score`… | 认领纠纷找维护者 |
+
+### 触发重跑（流水命令）
+
+在 **PR 评论**（单独一行）发送：
+
+```text
+/recheck
+```
+
+- 谁可触发：四位必审人、维护者、或该 PR 作者  
+- 作用：对当前 PR head **重新跑企业级检查套件**（与推送代码同等效果）  
+- 同义：`/rerun`、`/rerun-checks`  
+
+也可用 Actions 页对该 workflow 点 **Re-run jobs**；优先让同学用 `/recheck`，便于审计「谁在何时要求复检」。
+
+---
+
+## 4. 日常操作清单（复制用）
+
+### 收到 Design Review 请求
+
+```text
+1. 打开 PR → 确认标题 [Design] + docs/designs/#N-*.md
+2. 读方案：边界 / 风险 / 与 Issue 对齐
+3. 评论单独一行：/approve   或   /reject（写理由）
+4. 提醒：邮件 feizi_050920@qq.com；**先 Merge Design**，再等 hongwei-2026 `/accept` 后才写实现  
+5. 关联 PR 超 30 天无更新会被自动释放——审阅时可提醒同学保持进度  
+```
+
+### 收到 Impl Review 请求
+
+```text
+1. Checks 全绿？交付物（视频+截图）在正文？
+2. 作者是否 Assignee？Fixes #N 是否正确？
+3. 看视频 + 截图 + 关键 diff
+4. 评论：/approve   或   /reject（写清要改哪）
+```
+
+### 建议不要 `/approve` 的情形
+
+- 无视频链接或链接打不开  
+- 截图不足 2 张或明显与本任务无关  
+- Diff 含 Key / `.env` 实密  
+- 未锁定抢实现、或作者不是 Assignee  
+- Design 目录无对应文档却自称 Design  
+- 回退 Step3 门禁或待审库 cancel  
+
+### 评论模板（驳回）
+
+```markdown
+/reject
+
+## 审核意见（必审人）
+- [ ] 补充演示视频公网链接到 PR「演示视频」一节
+- [ ] 正文再贴 ≥2 张截图（改前/改后）
+- [ ] …
+补齐后请评论：`/recheck`，并 @ 必审人再 `/approve`
+```
+
+---
+
+## 5. 与维护者的分工（hongwei-2026）
+
+| 动作 | 谁 |
+|------|-----|
+| `/accept @user` / `/reject-claim` / `/score N` | 仅维护者（计分命令必审人也可，见任务板） |
+| 合并 main | 维护者（建议 Checks 全绿 + 必审人全员 `/approve` 后） |
+| 改分支保护 / 必审名单 | 维护者 |
+| 内容放行 | 四位必审人各自评论 `/approve` |
+
+计分命令 `/score N`：维护者 + 必审人可用；**建议仅在合并后由维护者执行**，避免重复记分。
+
+---
+
+## 6. 仪表盘与认领纠纷
+
+- 仪表盘：[任务仪表盘.md](./任务仪表盘.md)  
+- 有人占用不干：维护者 `/reject-claim`，或当事人 `/cancel`  
+- **一账号一任务**：若同学同时占多个，以机器人拒绝 `/claim` 为准；历史脏数据可 `/reject-claim` 清理  
+- **30 天停滞自动释放**：`Task stale auto-release` 每天扫描；关联 PR 超 30 天无更新会清接取人（可在 Actions 里 `workflow_dispatch` + dry_run 预览）  
+- 你审核时以 **Issue Assignee + 认领 JSON** 为准，不要口头答应换人  
+
+---
+
+## 7. 安全红线（一律 `/reject` / 呼叫维护者）
+
+- API Key、Token、私钥出现在代码、截图、视频、评论  
+- 关闭或绕过登录 / 本机绑定 / Step3 check  
+- 删除或架空 `verify_lessons` / `verify_security` 门禁  
+
+---
+
+## 8. 相关链接
+
+| 文档 | 用途 |
+|------|------|
+| [实训基地协作指南.md](./实训基地协作指南.md) | 给同学的接取说明 |
+| [../designs/README.md](../designs/README.md) | Design 文档提交位 |
+| [任务Issue标准块.md](./任务Issue标准块.md) | Issue 正文标准 |
+| 总入口 Issue | https://github.com/quanttide-academy/quanttide-academy/issues/7 |

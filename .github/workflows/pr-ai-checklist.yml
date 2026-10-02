@@ -1,0 +1,76 @@
+name: AI review checklist comment
+
+# 只发「AI 审核清单」评论：pull_request_target → fork PR 也可写。
+# 不 checkout、不执行 PR 代码；清单仅基于 pulls.listFiles。
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  checklist:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Post sticky AI checklist
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner, repo, pull_number: pr.number, per_page: 100
+            });
+            const names = files.map(f => f.filename);
+            const checks = [];
+            const add = (text) => checks.push(`- [ ] ${text}`);
+
+            add('未在 diff 中引入 API Key / `.env` 实密');
+            if (names.some(n => n.includes('loop_session') || n.includes('app.html'))) {
+              add('若改工作台：Step3 check 门禁仍在（未通过不可定稿）');
+            }
+            if (names.some(n => n.includes('review_queue'))) {
+              add('若改待审库：取消任务能力未回退');
+            }
+            if (names.some(n => n.includes('app.html'))) {
+              add('若改手册：侧栏目录仍固定、数据流与截图仍结合');
+            }
+            if (names.some(n => n.includes('llm_config'))) {
+              add('若改 LLM：默认 trust_env 关闭、超时可配置、思考链可关');
+            }
+            if (names.some(n => n.startsWith('docs/'))) {
+              add('若改文档：同事入口仍是 docs/handbook/index.md');
+            }
+            add('本地/CI：verify_docs_layout + verify_lessons + verify_security 通过');
+            if (/\[Design\]/i.test(pr.title || '')) add('Design PR：无完整实现代码堆砌，方案可审');
+            if (/\[Impl\]/i.test(pr.title || '') || /Fixes\s+#/i.test(pr.body || '')) {
+              add('Impl PR：正文含 Fixes #Issue，作者为受指派人');
+            }
+
+            const body = [
+              '## 🤖 任务自动审核助手（清单）',
+              '',
+              '以下为基于改动路径生成的审核清单。审核员看到后可随时评论 `/approve`，不必同时在线。管理员在必审都通过后合并。',
+              '',
+              ...checks,
+              '',
+              '### 改动文件（摘要）',
+              ...names.slice(0, 30).map(n => `- \`${n}\``),
+              names.length > 30 ? `- … 另有 ${names.length - 30} 个文件` : '',
+              '',
+              '_同一条评论会随 push 更新，不会刷屏。_',
+            ].filter(Boolean).join('\n');
+
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner, repo, issue_number: pr.number, per_page: 100
+            });
+            const prev = comments.find(c => (c.body || '').includes('任务自动审核助手'));
+            if (prev) {
+              await github.rest.issues.updateComment({ owner, repo, comment_id: prev.id, body });
+            } else {
+              await github.rest.issues.createComment({ owner, repo, issue_number: pr.number, body });
+            }

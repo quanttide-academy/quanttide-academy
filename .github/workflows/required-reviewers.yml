@@ -1,0 +1,275 @@
+name: Reviewer gate
+
+# 必审人 PR 评论 `/approve`；进度 sticky 评论展示谁过了/谁没过。
+on:
+  pull_request_target:
+    types: [opened, synchronize, reopened, ready_for_review]
+  issue_comment:
+    types: [created, edited]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+  checks: write
+  statuses: write
+
+jobs:
+  tally:
+    name: tally
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify /approve and post progress
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const REQUIRED_ALL = ['hongwei-2026', 'hl019', 'Jerrybao99', 'likexin105'];
+            const PASS = new Set(['approve', 'lgtm', 'ack']);
+            const FAIL = new Set(['reject', 'changes', 'deny']);
+            const MARKER = '<!-- required-reviewers-progress -->';
+
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            let pull_number = context.payload.pull_request && context.payload.pull_request.number;
+            if (!pull_number && context.payload.issue && context.payload.issue.pull_request) {
+              pull_number = context.payload.issue.number;
+            }
+            if (!pull_number) {
+              core.info('Not a pull request event — skip');
+              return;
+            }
+
+            if (context.eventName === 'issue_comment') {
+              const body0 = (context.payload.comment && context.payload.comment.body) || '';
+              if (body0.indexOf(MARKER) !== -1) {
+                core.info('Ignore sticky progress comment event');
+                return;
+              }
+            }
+
+            const prRes = await github.rest.pulls.get({ owner, repo, pull_number });
+            const pr = prRes.data;
+            if (pr.state !== 'open') {
+              core.info('PR not open — skip');
+              return;
+            }
+
+            const headSha = pr.head.sha;
+            const authorLogin = pr.user && pr.user.login ? pr.user.login : '';
+            const author = authorLogin.toLowerCase();
+            const REQUIRED = REQUIRED_ALL.filter(function (u) { return u.toLowerCase() !== author; });
+            if (REQUIRED.length < REQUIRED_ALL.length) {
+              core.info('Excluded PR author @' + authorLogin + ' (cannot self-pass).');
+            }
+            if (!REQUIRED.length) {
+              core.setFailed('No required reviewers left after excluding author.');
+              return;
+            }
+
+            try {
+              await github.rest.pulls.requestReviewers({
+                owner: owner, repo: repo, pull_number: pull_number, reviewers: REQUIRED
+              });
+            } catch (e) {
+              core.warning('requestReviewers skipped: ' + (e.status || e.message));
+            }
+
+            const commitRes = await github.rest.repos.getCommit({ owner: owner, repo: repo, ref: headSha });
+            const commit = commitRes.data;
+            const headTime = new Date(
+              (commit.commit.committer && commit.commit.committer.date) ||
+              (commit.commit.author && commit.commit.author.date)
+            );
+
+            function parseCmd(body) {
+              const lines = String(body || '').split(/\r?\n/).map(function (l) { return l.trim(); }).filter(Boolean);
+              for (let i = 0; i < lines.length; i++) {
+                const line = lines[i];
+                let m = line.match(/^\/(approve|lgtm|ack|reject|changes|deny)(?![A-Za-z0-9_])/i);
+                if (!m && /^(approve|lgtm|ack|reject|changes|deny)$/i.test(line)) {
+                  m = [line, line];
+                }
+                if (!m) continue;
+                const key = m[1].toLowerCase();
+                if (PASS.has(key)) return 'pass';
+                if (FAIL.has(key)) return 'fail';
+              }
+              return null;
+            }
+
+            if (context.eventName === 'issue_comment') {
+              const c = context.payload.comment;
+              const actor = (c.user && c.user.login ? c.user.login : '').toLowerCase();
+              const cmd = parseCmd(c.body);
+              if (cmd) {
+                if (actor === author) {
+                  try {
+                    await github.rest.issues.createComment({
+                      owner: owner, repo: repo, issue_number: pull_number,
+                      body: '⛔ @' + c.user.login + ' 是本 PR 作者，不能给自己 `/approve`。请其余必审人评论。'
+                    });
+                  } catch (_) {}
+                } else if (REQUIRED_ALL.map(function (u) { return u.toLowerCase(); }).indexOf(actor) === -1) {
+                  try {
+                    await github.rest.issues.createComment({
+                      owner: owner, repo: repo, issue_number: pull_number,
+                      body: '⛔ @' + c.user.login + ' 不在必审名单，票不计入。'
+                    });
+                  } catch (_) {}
+                } else {
+                  try {
+                    await github.rest.reactions.createForIssueComment({
+                      owner: owner, repo: repo, comment_id: c.id,
+                      content: cmd === 'pass' ? '+1' : '-1'
+                    });
+                  } catch (_) {}
+                }
+              }
+            }
+
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner: owner, repo: repo, issue_number: pull_number, per_page: 100
+            });
+
+            const latest = new Map();
+            for (let i = 0; i < comments.length; i++) {
+              const c = comments[i];
+              const login = c.user && c.user.login;
+              if (!login) continue;
+              if (String(c.body || '').indexOf(MARKER) !== -1) continue;
+              if (login.indexOf('[bot]') !== -1 || login === 'github-actions[bot]') continue;
+              const cmd = parseCmd(c.body);
+              if (!cmd) continue;
+              const at = new Date(c.updated_at || c.created_at);
+              if (at.getTime() + 2000 < headTime.getTime()) continue;
+              const key = login.toLowerCase();
+              const prev = latest.get(key);
+              if (!prev || at >= prev.at) {
+                latest.set(key, { state: cmd, at: at, user: login });
+              }
+            }
+
+            if (context.eventName === 'issue_comment') {
+              const c = context.payload.comment;
+              const cmd = parseCmd(c.body);
+              const actor = (c.user && c.user.login ? c.user.login : '').toLowerCase();
+              if (cmd && REQUIRED.map(function (u) { return u.toLowerCase(); }).indexOf(actor) !== -1 && actor !== author) {
+                latest.set(actor, {
+                  state: cmd,
+                  at: new Date(c.updated_at || c.created_at),
+                  user: c.user.login
+                });
+              }
+            }
+
+            const missing = [];
+            const rejected = [];
+            const passed = [];
+            for (let i = 0; i < REQUIRED.length; i++) {
+              const need = REQUIRED[i];
+              const hit = latest.get(need.toLowerCase());
+              if (!hit) { missing.push(need); continue; }
+              if (hit.state !== 'pass') rejected.push(need);
+              else passed.push(need);
+            }
+
+            const done = passed.length;
+            const total = REQUIRED.length;
+            let bar = '';
+            for (let i = 0; i < done; i++) bar += '█';
+            for (let i = 0; i < total - done; i++) bar += '░';
+
+            const rows = REQUIRED.map(function (u) {
+              const hit = latest.get(u.toLowerCase());
+              let st = '⏳ 待 `/approve`';
+              if (hit && hit.state === 'pass') st = '✅ 已通过';
+              if (hit && hit.state === 'fail') st = '❌ 已驳回';
+              return '| @' + u + ' | ' + st + ' |';
+            });
+
+            const progressBody = [
+              MARKER,
+              '## 必审进度',
+              '',
+              '**' + done + ' / ' + total + '** 已通过 `' + bar + '`',
+              '',
+              'Head: `' + headSha.slice(0, 7) + '`',
+              authorLogin ? ('已排除作者（不可自审）：@' + authorLogin) : '',
+              '',
+              '| 必审人 | 状态 |',
+              '|--------|------|',
+              rows.join('\n'),
+              '',
+              '---',
+              '在本 PR **评论单独一行**发送：`/approve` 或 `/reject`',
+              'Aliases: `/lgtm` `/ack` = approve; `/changes` `/deny` = reject.',
+              '**新 push 后旧票作废**，须重新 `/approve`。',
+              '',
+              '_本条由机器人维护，请勿手动编辑。_',
+            ].filter(Boolean).join('\n');
+
+            try {
+              const prev = comments.find(function (c) { return String(c.body || '').indexOf(MARKER) !== -1; });
+              if (prev) {
+                await github.rest.issues.updateComment({
+                  owner: owner, repo: repo, comment_id: prev.id, body: progressBody
+                });
+              } else {
+                await github.rest.issues.createComment({
+                  owner: owner, repo: repo, issue_number: pull_number, body: progressBody
+                });
+              }
+            } catch (e) {
+              core.warning('Progress sticky skipped (' + (e.status || e.message) + ')');
+            }
+
+            // 投票后在时间线跟一条确认，避免只改置顶评论时看不清「有没有更新」
+            if (context.eventName === 'issue_comment') {
+              const c = context.payload.comment;
+              const cmd = parseCmd(c.body);
+              const actorLogin = c.user && c.user.login ? c.user.login : '';
+              const actor = actorLogin.toLowerCase();
+              if (cmd && REQUIRED.map(function (u) { return u.toLowerCase(); }).indexOf(actor) !== -1 && actor !== author) {
+                try {
+                  const tip = cmd === 'pass'
+                    ? ('✅ @' + actorLogin + ' 已计入通过（当前 **' + done + ' / ' + total + '**）。请看上方「必审进度」表格。')
+                    : ('❌ @' + actorLogin + ' 已计入驳回（当前 **' + done + ' / ' + total + '**）。请看上方「必审进度」表格。');
+                  await github.rest.issues.createComment({
+                    owner: owner, repo: repo, issue_number: pull_number, body: tip
+                  });
+                } catch (_) {}
+              }
+            }
+
+            await core.summary.addRaw(progressBody).write();
+
+            // issue_comment / pull_request_target 的 Check 会记在 default branch SHA 上，
+            // 分支保护看的是 PR head → 必须显式写 status 到 pr.head.sha
+            const ok = !(missing.length || rejected.length);
+            const statusContext = 'Required reviewers (all must approve) / all-reviewers';
+            try {
+              await github.rest.repos.createCommitStatus({
+                owner: owner,
+                repo: repo,
+                sha: headSha,
+                state: ok ? 'success' : 'failure',
+                context: statusContext,
+                description: ok
+                  ? ('review ' + done + '/' + total + ' approved')
+                  : ('review ' + done + '/' + total + ' pending'),
+                target_url: 'https://github.com/' + owner + '/' + repo + '/pull/' + pull_number
+              });
+            } catch (e) {
+              core.setFailed('createCommitStatus failed: ' + (e.status || e.message));
+              return;
+            }
+            if (!ok) {
+              const parts = [];
+              if (missing.length) parts.push('waiting /approve: ' + missing.map(function (u) { return '@' + u; }).join(', '));
+              if (rejected.length) parts.push('已驳回：' + rejected.map(function (u) { return '@' + u; }).join(', '));
+              core.warning(parts.join('；'));
+              core.info('Votes incomplete. Merge box follows the commit status only.');
+              return;
+            }
+            core.info('All required reviewers posted /approve for current head; status written to ' + headSha.slice(0, 7));

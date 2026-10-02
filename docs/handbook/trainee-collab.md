@@ -1,0 +1,152 @@
+> 本页从课题仓协作包迁移到实训基地第二大脑，供全员复用。
+> 产品代码仍在 `hongwei-2026/product-requirement-loop`。
+
+# 实训基地协作指南（User Guide）
+
+> **读者：** 实训基地同学 / 新加入协作者  
+> **总看板：** [实训基地任务汇总表.md](./实训基地任务汇总表.md)（接取人自动同步）  
+> **仓库：** https://github.com/hongwei-2026/product-requirement-loop  
+> **维护者：** @hongwei-2026 · 审核通知邮箱：`feizi_050920@qq.com`
+
+本指南解决群里说的问题：**没有正式分工机制、新人不知道怎么上手**。按下面做即可。
+
+---
+
+## 1. 一句话机制
+
+用 **GitHub Issue 命令 + Design PR + 维护者批准 + Actions** 管任务：
+
+| 步骤 | 谁做 | 结果 |
+|------|------|------|
+| `/claim` | 同学 | 登记意向；汇总表接取人仍为 — |
+| Design PR（方案落 `docs/designs/`） | 同学 | 可审查的设计合同 |
+| **Merge** Design | 维护者 | 方案入库 |
+| `/accept @同学ID` | 仅维护者 | **汇总表接取人栏写入该 ID**，任务锁定 |
+| Implementation PR | 同学 | 代码 + 视频链接 + 截图≥2 |
+| 必审人评论 `/approve` → 合并 → `/score` | 审核 / 维护者 | 计分 |
+
+---
+
+## 2. 硬性规则（必须遵守）
+
+1. **一账号同时只能接 1 个进行中任务**（已 `/claim` 或已 `/accept` 期间不能再抢别的题）。  
+2. **接取人栏不会在 `/claim` 时写入**——必须 Design 已合并，且维护者执行了 `/accept @你`。  
+3. **关联 Design/Impl PR 至少每 30 天更新一次**；超时系统自动释放任务，接取人清空。  
+4. 实现 PR 必须带：**代码 + 可公网演示视频链接 + ≥2 张截图**（写在 PR 正文）。  
+5. 禁止把 API Key / `.env` 写进代码、截图、视频、Issue。  
+6. **同一账号同时只能有 1 个未关闭 PR**。PR 作者须是贡献者本人，正文含「贡献者声明」和「AI 使用说明」。  
+7. `/claim` 同一条评论另起一行写 `邮箱：you@example.com`（能收信）。
+
+---
+
+## 3. 同学上手（逐步）
+
+### 3.1 选任务
+
+打开 [实训基地任务汇总表.md](./实训基地任务汇总表.md) 或 [Issue #7](https://github.com/quanttide-academy/quanttide-academy/issues/7)，选「接取人」为 `—` 的题，点进 Issue **先读正文**。
+
+### 3.2 登记意向
+
+在该 Issue 评论（单独一行）：
+
+```text
+/claim
+邮箱：you@example.com
+```
+
+机器人会记下邮箱并告诉你下一步。此时汇总表接取人仍是空的。
+
+### 3.3 交设计（Design）
+
+1. 分支：`design/#<号>-简短英文`  
+2. 复制 `docs/designs/_TEMPLATE.md` → `docs/designs/#<号>-….md`  
+3. 开 PR，选模板 **Design**，标题 `[Design] #<号> …`，正文 `Related to #<号>`（不要用 `Fixes`）  
+4. 邮件 `feizi_050920@qq.com`：Issue 链接 + Design PR 链接 + 你的 GitHub ID  
+
+说明：[docs/designs/README.md](../designs/README.md)
+
+### 3.4 等批准
+
+维护者合并 Design 后，会在 Issue 评论：
+
+```text
+/accept @你的GitHubID
+```
+
+成功后：**汇总表「接取人」自动变成你**。在此之前不要开实现 PR。
+
+### 3.5 实现与交付
+
+1. 分支：`feat/#<号>-简短英文`  
+2. PR 选模板 **Implementation**，`Fixes #<号>`  
+3. 正文贴演示视频链接 + ≥2 张截图  
+4. 必审人在 PR 评论单独一行 `/approve`（点 GitHub Approve 按钮不算），直到检查 `all-reviewers` 变绿；CI / Enterprise 也要绿  
+5. 合并后维护者 `/score N`
+
+补材料后可在 PR 评论：`/recheck`
+
+### 3.6 放弃
+
+```text
+/cancel
+```
+
+或 `/release`。接取人栏清空，别人可接。
+
+---
+
+## 4. 维护者 / 审核员怎么配合
+
+| 角色 | 做什么 |
+|------|--------|
+| 维护者 @hongwei-2026 | 审并 **Merge** Design → `/accept @ID`；合并实现；`/score`；纠纷 `/reject-claim` |
+| 必审人（hongwei-2026 / hl019 / Jerrybao99 / likexin105） | 内容审查；缺视频/截图不要 `/approve`。作者不能给自己 `/approve` |
+| Actions | 一账号一题校验、Design 未合并拒 accept、接取人写入汇总表、30 天停滞自动释放 |
+
+审核细则：[审核员指南.md](./审核员指南.md)
+
+---
+
+## 5. 文档地图（别搞混）
+
+| 文档 | 用途 |
+|------|------|
+| **[实训基地任务汇总表.md](./实训基地任务汇总表.md)** | 基地总看板 + 接取人（自动） |
+| **本文件** | 基地 User Guide。原《任务贡献指南》细则已并入本文件 |
+| [审核员指南.md](./审核员指南.md) | 给必审人 |
+| [企业级PR流水.md](./企业级PR流水.md) | Checks / `/recheck` / 30 天释放 |
+| [实训贡献机制-同学汇报稿.md](./实训贡献机制-同学汇报稿.md) | 对外口头/飞书汇报用 |
+
+---
+
+## 6. 常见问题
+
+**Q：我 `/claim` 了，汇总表怎么还没有我的名字？**  
+A：正常。要等 Design 被 Merge，且维护者 `/accept @你` 之后才会写。
+
+**Q：可以同时接两道题吗？**  
+A：不可以。先 `/cancel` 再换题。
+
+**Q：一个月没推 PR 会怎样？**  
+A：系统自动释放，接取人清空，任务重开。
+
+**Q：Design 还没合，维护者就能 `/accept` 吗？**  
+A：不能。机器人会因「未找到已合并 Design PR」拒绝。
+
+**Q：合并盒为什么红着「必审 0/3」？**  
+A：还差必审人在本 PR 发 `/approve`。只看这一条状态；同名 workflow 任务不再另挂红灯。
+
+---
+
+## 7. 并入的细则（难度 / 诚信）
+
+| 难度 | 标签 | 默认积分 |
+|------|------|----------|
+| 简单 | `difficulty:easy` | 10～15 |
+| 中等 | `difficulty:medium` | 25～35 |
+| 难 | `difficulty:hard` | 50～60 |
+| 特难 | `difficulty:extreme` | 70～90 |
+
+分数以 Issue 为准；`/score` 可按质量微调。Design 邮件主题：`[Design] #<issue> <GitHubID>`。本地 Key 只放 `project/.env`。不按已合并 Design 实现时，维护者可 `/reject-claim`。
+
+工作流复用：把 `.github/workflows/`（`task-board`、`required-reviewers`、`enterprise-pr`、`pr-task-gate`、`pr-ai-checklist`、`task-stale-release`）、`.github/ISSUE_TEMPLATE/task.yml`、`.github/PULL_REQUEST_TEMPLATE/` 与本指南一并拷到其它实训仓。分支保护只挂一条状态：`Required reviewers (all must approve) / all-reviewers`。

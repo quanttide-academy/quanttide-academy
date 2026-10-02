@@ -5,6 +5,9 @@ date: 2026-09-22
 
 # 协作指南
 
+> **协作地点（已明确）：** 任务 Issue、Design PR、实现 PR 开在本仓库 `quanttide-academy/quanttide-academy`。产品代码仓 `hongwei-2026/product-requirement-loop` 只跑程序，不接收交稿。
+> 企业级流水与审核指南：见 [enterprise-pr.md](./enterprise-pr.md)、[reviewer-guide.md](./reviewer-guide.md)。
+
 适用于量潮实训基地技术和非技术人员的标准化协作指南  
 
 > 方括号如 `[仓库 URL]` 是占位符；具体取值见该项目在 [任务清单](../../roadmap.md) 中的条目。  
