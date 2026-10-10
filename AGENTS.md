@@ -19,8 +19,6 @@ quanttide-academy/
 ├── docs/                              # 程序型记忆
 │   ├── bylaw/                         # Bylaw（工作章程）
 │   │   └── index.md
-│   ├── handbook/                      # Handbook（工作手册）
-│   │   └── co-guide.md
 │   ├── specification/                 # Specification（工程标准）
 │   │   ├── bylaw.md
 │   │   ├── roadmap.md

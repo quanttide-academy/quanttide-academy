@@ -1,6 +1,6 @@
 ---
 tags: [已阅]
-date: 2026-09-30
+date: 2026-10-10
 ---
 
 # 量潮实训
@@ -21,9 +21,7 @@ date: 2026-09-30
 6. 明确本仓库结构
    - [仓库结构](#仓库结构)
    - [命名规范](./docs/specification/second-brain.md)
-7. [如何领取任务](./roadmap.md) 
-8. [如何发布任务](./docs/handbook/co-guide.md#发布任务)
-9. [完整协作流程（待打磨）](./docs/handbook/co-guide.md)
+7. [如何领取任务](./roadmap.md)
 
 也可以在 AI 的对话窗口复制粘贴如下提示词，快速理解学习本仓库内容：  
 
@@ -44,8 +42,6 @@ quanttide-academy/
 ├── docs/
 │   ├── bylaw/
 │   │   └── index.md                 # 工作章程
-│   ├── handbook/
-│   │   └── co-guide.md              # 协作流程
 │   ├── specification/
 │   │   ├── bylaw.md                 # 章程写作章程
 │   │   ├── roadmap.md               # 任务清单模板
