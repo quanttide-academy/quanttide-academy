@@ -116,12 +116,14 @@
 
 - 发起人：于鸿伟
 - 发起日期：26-09-22
-- 项目描述：量潮产品需求梳理智能体：把官方产品日志整理成需求故事与定稿 JSON
+- 项目描述：把官方产品日志整理成需求故事与定稿 JSON，供产品同事审阅。
 - [仓库入口](https://github.com/hongwei-2026/product-requirement-loop)
+- 同事唯一入口：仓库内 `docs/handbook/index.md`
 
 #### 验收标准
 
-- [ ] 
+- [ ] 下列任务要求写清目标、操作、验收与评审人，可按日常任务方式分配
+- [ ] 产品仓文档合并精简：入口唯一、已删除任务计分板；过程材料不充当入口
 - [ ] 评审员评审通过
 
 #### 评审人员
@@ -131,6 +133,59 @@
 - [ ] 黄亮：26-10-
 - [ ] 王敏华：26-10-
 - [ ] 林莉婷：26-10-
+
+#### 任务：文档入口归一
+
+- 优先级：紧急重要
+- 文件位置：`hongwei-2026/product-requirement-loop` → `docs/handbook/index.md`
+- 目标：同事打开产品仓只走一个入口，不必在多份中文文档里找。
+- 任务要求：
+	- [ ] 根 README 只指向 `docs/handbook/index.md`
+	- [ ] 新文档放进 `docs/handbook` / `docs/specification` / `docs/tutorial`，文件名小写英文+连字符
+	- [ ] `docs/交付`、`docs/阶段*` 标明为过程材料，不是入口
+	- [ ] 已删除任务计分板；不再维护平行任务细则文档
+- 参考资料：
+	- [命名规范](docs/specification/second-brain.md)
+	- [产品仓 handbook](https://github.com/hongwei-2026/product-requirement-loop/blob/main/docs/handbook/index.md)
+- 咨询对象：鲍宇航
+- 执行员：
+	- [ ] 于鸿伟
+- 评审员：鲍宇航
+	- [ ] 鲍宇航
+- 评审标准：
+	- [ ] 任务要求全部满足
+	- [ ] 打开根 README 只能看到一个同事入口
+	- [ ] 措辞正式、准确、简洁、清晰
+	- [ ] 评审员评审通过
+- DDL：
+	- 于鸿伟：26-10-12
+	- 鲍宇航：26-10-14
+
+#### 任务：顶栏展示模型摘要
+
+- 优先级：紧急重要
+- 文件位置：`hongwei-2026/product-requirement-loop` → `project/web/`
+- 目标：登录后顶栏稳定显示 `provider`、`model`、`timeout`、`thinking_off`，排障不用翻配置。
+- 任务要求：
+	- [ ] 登录后顶栏可见上述四项，刷新后仍在
+	- [ ] 改 `project/.env` 的 provider/model 并重启后，顶栏跟着变
+	- [ ] 页面与截图不出现 API Key
+	- [ ] `verify_lessons`、`verify_security` 仍通过
+- 参考资料：
+	- [产品仓 handbook](https://github.com/hongwei-2026/product-requirement-loop/blob/main/docs/handbook/index.md)
+- 咨询对象：于鸿伟
+- 执行员：待分配（提 PR 前先在 roadmap 勾选）
+- 评审员：鲍宇航
+	- [ ] 鲍宇航
+- 评审标准：
+	- [ ] 任务要求全部满足
+	- [ ] 按 PR 步骤能复现顶栏变化
+	- [ ] 措辞与截图不含密钥
+	- [ ] 评审员评审通过
+- DDL：
+	- 执行员：分配后 7 天
+	- 鲍宇航：收到 PR 后 2 天
+
 
 ## 待办库
 
