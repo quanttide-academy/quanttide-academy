@@ -95,6 +95,14 @@ quanttide-academy/
 - 只改用户明确提到的工作范围内的文件；范围外的文件须先征得用户同意再改
 - 用户有决定权的内容（如任务勾选与评审结论）禁止擅自修改或打勾
 
+## Cursor Cloud specific instructions
+
+可运行代码在子模块 `packages/quanttide-academy-toolkit`。环境 install 会初始化该子模块，把 `uv` 0.13.4 与 `lark-cli` 1.0.98 链到 `/usr/local/bin`，并在子模块执行 `uv sync --frozen --python 3.12`。测试与自检在子模块目录执行，命令见 [AGENTS.md](./packages/quanttide-academy-toolkit/AGENTS.md)「常用命令」。
+
+飞书登录要本人扫码，不放进 install。没有 `config.yaml` 时 `uv run feishu-workflows doctor --json` 退出码为 1，并指向 `feishu-workflows-setup questions --json`。离线闭环用 `uv run feishu-workflows selftest --json`。
+
+`tests/fixtures/topics.json` 第 2 条截止日期是 `2026-10-23`。从 2026-10-21 起，该条落入「截止在 2 天内，优先级至少 P2」规则，真实时钟下 `selftest` 与一部分 `pytest` 会失败。把时钟设到 2026-10-15 时，`uv run pytest -q --cov` 为 231 passed、覆盖率 91%，`selftest` 为 `"status": "ok"`，`integrated_tests/core/test_migrations.py` 与 `integrated_tests/watch/test_poll.py` 为 2 passed，`ruff check` 与 `ruff format --check` 通过。
+
 ## 验证清单
 
 - [ ] 1 只改了用户明确请求的文件
