@@ -1,6 +1,6 @@
 # 量潮实训
 
-本仓库存放量潮实训基地的文档（规章、工程规范、教程）及可复用工具，承接实训基地的多人异步协作工作。  
+本仓库存放量潮实训基地的文档（规章、工程规范、教程、工作报告）及可复用工具，承接实训基地的多人异步协作工作。  
 
 ## quick-start
 
@@ -25,8 +25,11 @@
    | Issue 沟通完成后提交代码 | [pr-editor](./.agent/skills/pr-editor/SKILL.md) | 标题与描述模板 |
    | 飞书群聊待办、人员跟踪与群管理 | [feishu-workflows](./.agent/skills/feishu-workflows/SKILL.md) | 飞书工作流接驳包 |
 
-7. 学习如何使用 Grok Bot + Cursor（未写入）
-8. [学习 Git 工作流（待完善）](./docs/tutorial/git-workflow.md)
+7. 周会简报
+   - 编撰：先读 [周会简报版式](./docs/specification/weekly-brief.md)，再写入 [data/report/weekly-brief/](./data/report/weekly-brief/)
+   - 查询过往：打开 [data/report/weekly-brief/](./data/report/weekly-brief/)
+8. 学习如何使用 Grok Bot + Cursor（未写入）
+9. [学习 Git 工作流（待完善）](./docs/tutorial/git-workflow.md)
 
 也可以将本仓库作为上下文投喂给 AI，并在 AI 的对话窗口复制粘贴如下提示词，快速理解学习本仓库内容：  
 
@@ -49,9 +52,13 @@ quanttide-academy/
 │   ├── specification/
 │   │   ├── bylaw.md                 # 章程写作章程
 │   │   ├── proposal.md              # 提案写作规范
-│   │   └── second-brain.md          # 命名规范
+│   │   ├── second-brain.md          # 命名规范
+│   │   └── weekly-brief.md          # 周会简报版式
 │   └── tutorial/
 │       └── git-workflow.md          # Git 工作流
+├── data/
+│   └── report/
+│       └── weekly-brief/            # 周会简报
 ├── packages/
 │   └── quanttide-academy-toolkit/   # 实训基地工具箱（Git 子模块）
 └── .agent/                          # skill

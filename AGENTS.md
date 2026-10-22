@@ -5,7 +5,7 @@
 
 ## 项目概述
 
-量潮实训基地的领域级第二大脑（`quanttide-academy`）。存放量潮实训基地的文档（规章、工程规范、教程）及可复用工具，承接实训基地的多人异步协作工作。  
+量潮实训基地的领域级第二大脑（`quanttide-academy`）。存放量潮实训基地的文档（规章、工程规范、教程、工作报告）及可复用工具，承接实训基地的多人异步协作工作。  
 
 ## 相关文档
 
@@ -44,6 +44,9 @@ quanttide-academy/
 │   ├── bylaw/                         # Bylaw（工作章程）
 │   ├── specification/                 # Specification（工程标准）
 │   └── tutorial/                      # Tutorial（工作教程）
+├── data/                              # 陈述型记忆
+│   └── report/                        # Report（工作报告）
+│       └── weekly-brief/              # 周会简报
 ├── packages/                          # Toolkit（可复用工具包）
 │   └── quanttide-academy-toolkit/     # 实训基地工具箱（飞书工作流子模块）
 └── .agent/
