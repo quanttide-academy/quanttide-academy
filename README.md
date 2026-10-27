@@ -23,7 +23,7 @@
    | 新建或审核 skill | [create-skill](./.agent/skills/create-skill/SKILL.md) | skill 结构与写法 |
    | 复杂任务需协作，提 PR 前沟通 | [issue-editor](./.agent/skills/issue-editor/SKILL.md) | 标题与正文模板 |
    | Issue 沟通完成后提交代码 | [pr-editor](./.agent/skills/pr-editor/SKILL.md) | 标题与描述模板 |
-   | 飞书群聊待办、人员跟踪与群管理 | [feishu-workflows](./.agent/skills/feishu-workflows/SKILL.md) | 飞书工作流接驳包 |
+   | 飞书群聊待办、人员跟踪与群管理 | [feishu-workflows](./.agent/skills/feishu-workflows/SKILL.md) | 实训基地工具箱的当前通道（飞书协作接驳） |
 
 7. 周会简报
    - 编撰：先读 [周会简报版式](./docs/specification/weekly-brief.md)，再写入 [data/report/weekly-brief/](./data/report/weekly-brief/)
@@ -60,6 +60,6 @@ quanttide-academy/
 │   └── report/
 │       └── weekly-brief/            # 周会简报
 ├── packages/
-│   └── quanttide-academy-toolkit/   # 实训基地工具箱（Git 子模块）
+│   └── quanttide-academy-toolkit/   # 实训基地工具箱（当前通道：飞书协作接驳）
 └── .agent/                          # skill
 ```
