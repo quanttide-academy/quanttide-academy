@@ -20,7 +20,7 @@
 | 命名、目录、资产类型 | [second-brain.md](./docs/specification/second-brain.md) | 规则总览；资产分类；目录结构 |
 | 写章程 | [bylaw.md](./docs/specification/bylaw.md) | 第二章 文档结构 |
 | Git、PR | [git-workflow.md](./docs/tutorial/git-workflow.md) | 完整 PR 流程 |
-| 飞书、待办、群聊、watch、org | [AGENTS.md](./packages/quanttide-academy-toolkit/AGENTS.md) | 常见任务；工作流程 |
+| 工具箱、飞书、飞书协作接驳、待办、群聊、watch、org | [AGENTS.md](./packages/quanttide-academy-toolkit/AGENTS.md) | 常见任务；工作流程 |
 
 ## 业务意图
 
@@ -48,7 +48,7 @@ quanttide-academy/
 │   └── report/                        # Report（工作报告）
 │       └── weekly-brief/              # 周会简报
 ├── packages/                          # Toolkit（可复用工具包）
-│   └── quanttide-academy-toolkit/     # 实训基地工具箱（飞书工作流子模块）
+│   └── quanttide-academy-toolkit/     # 实训基地工具箱（当前通道：飞书协作接驳）
 └── .agent/
     └── skills/                        # Toolkit（工作所需 skill 与脚本）
         ├── agents-editor/             # 撰写、重构 AGENTS.md

@@ -5,6 +5,8 @@ description: 飞书工作流（群聊意图转待办 intent、重点人员跨群
 
 # 飞书工作流
 
+操作 `packages/quanttide-academy-toolkit`（实训基地工具箱；安装名 `quanttide-academy-toolkit`，导入名 `quanttide_academy_toolkit`）。当前接驳通道是飞书协作，命令入口仍是 `feishu-workflows` 与 `feishu-workflows-setup`。
+
 ## 流程
 
 1. 切换工作目录至 `packages/quanttide-academy-toolkit/`
