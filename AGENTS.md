@@ -20,6 +20,7 @@
 | 命名、目录、资产类型 | [second-brain.md](./docs/specification/second-brain.md) | 规则总览；资产分类；目录结构 |
 | 写章程 | [bylaw.md](./docs/specification/bylaw.md) | 第二章 文档结构 |
 | Git、PR | [git-workflow.md](./docs/tutorial/git-workflow.md) | 完整 PR 流程 |
+| product-requirement-loop 开发 | [product-requirement-loop-onboarding.md](./docs/tutorial/product-requirement-loop-onboarding.md) | 链到产品仓 handbook / 开发者协作指南 |
 | 工具箱、飞书、飞书协作接驳、待办、群聊、watch、org | [AGENTS.md](./packages/quanttide-academy-toolkit/AGENTS.md) | 常见任务；工作流程 |
 
 ## 业务意图
@@ -45,8 +46,10 @@ quanttide-academy/
 │   ├── specification/                 # Specification（工程标准）
 │   └── tutorial/                      # Tutorial（工作教程）
 ├── data/                              # 陈述型记忆
-│   └── report/                        # Report（工作报告）
-│       └── weekly-brief/              # 周会简报
+│   ├── report/                        # Report（工作报告）
+│   │   └── weekly-brief/              # 周会简报
+│   └── roadmap/                       # Roadmap（平台项目索引）
+│       └── product-requirement-loop.md
 ├── packages/                          # Toolkit（可复用工具包）
 │   └── quanttide-academy-toolkit/     # 实训基地工具箱（当前通道：飞书协作接驳）
 └── .agent/

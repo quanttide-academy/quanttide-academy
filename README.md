@@ -30,6 +30,7 @@
    - 查询过往：打开 [data/report/weekly-brief/](./data/report/weekly-brief/)
 8. 学习如何使用 Grok Bot + Cursor（未写入）
 9. [学习 Git 工作流（待完善）](./docs/tutorial/git-workflow.md)
+10. 参与平台项目 **product-requirement-loop**：[开发上手教程](./docs/tutorial/product-requirement-loop-onboarding.md) · [路线图索引](./data/roadmap/product-requirement-loop.md)
 
 也可以将本仓库作为上下文投喂给 AI，并在 AI 的对话窗口复制粘贴如下提示词，快速理解学习本仓库内容：  
 
@@ -55,10 +56,13 @@ quanttide-academy/
 │   │   ├── second-brain.md          # 命名规范
 │   │   └── weekly-brief.md          # 周会简报版式
 │   └── tutorial/
-│       └── git-workflow.md          # Git 工作流
+│       ├── git-workflow.md          # Git 工作流
+│       └── product-requirement-loop-onboarding.md  # 产品仓开发上手
 ├── data/
-│   └── report/
-│       └── weekly-brief/            # 周会简报
+│   ├── report/
+│   │   └── weekly-brief/            # 周会简报
+│   └── roadmap/
+│       └── product-requirement-loop.md
 ├── packages/
 │   └── quanttide-academy-toolkit/   # 实训基地工具箱（当前通道：飞书协作接驳）
 └── .agent/                          # skill
