@@ -25,6 +25,8 @@
    | Issue 沟通完成后提交代码 | [pr-editor](./.agent/skills/pr-editor/SKILL.md) | 标题与描述模板 |
    | 飞书群聊待办、人员跟踪与群管理 | [feishu-workflows](./.agent/skills/feishu-workflows/SKILL.md) | 实训基地工具箱的当前通道（飞书协作接驳） |
    | 实训职业探索访谈、认知校准与搭档名片 | [career-discovery-interview](./.agent/skills/career-discovery-interview/SKILL.md) | 本地启发式访谈、多目标权衡与飞书个人协作主页 |
+   | 日常进展/卡点复盘与困惑闭环 | [cit-reflection](./.agent/skills/cit-reflection/SKILL.md) | 本地关键事件反思（CIT）、困惑解决确认与私聊互助归档 |
+   | 扫描公共索引找搭档/找能帮的人 | [peer-buddy-matcher](./.agent/skills/peer-buddy-matcher/SKILL.md) | 宿主无关的公共索引增量巡检与双向 Peer-Buddy 撮合 |
 
 7. 周会简报
    - 编撰：先读 [周会简报版式](./docs/specification/weekly-brief.md)，再写入 [data/report/weekly-brief/](./data/report/weekly-brief/)

@@ -22,6 +22,8 @@
 | Git、PR | [git-workflow.md](./docs/tutorial/git-workflow.md) | 完整 PR 流程 |
 | 工具箱、飞书、飞书协作接驳、待办、群聊、watch、org | [AGENTS.md](./packages/quanttide-academy-toolkit/AGENTS.md) | 常见任务；工作流程 |
 | 职业探索、个人认知、搭档名片、个人主页 | [SKILL.md](./.agent/skills/career-discovery-interview/SKILL.md) | Phase 0；Phase 1；Phase 3 |
+| 关键事件反思、CIT、卡点归档、困惑闭环、私聊互助 | [SKILL.md](./.agent/skills/cit-reflection/SKILL.md) | Mode 1；Mode 2 |
+| 找搭档、公共索引巡检、Peer-Buddy、双向撮合 | [SKILL.md](./.agent/skills/peer-buddy-matcher/SKILL.md) | Trigger Layers；Execution Workflow |
 
 ## 业务意图
 
@@ -54,10 +56,12 @@ quanttide-academy/
     └── skills/                        # Toolkit（工作所需 skill 与脚本）
         ├── agents-editor/             # 撰写、重构 AGENTS.md
         ├── career-discovery-interview/ # 实训学员职业探索访谈与协作主页
+        ├── cit-reflection/            # 端侧关键事件反思与困惑闭环
         ├── create-skill/              # 编写、审核 skill
         ├── feishu-workflows/          # 飞书工作流引导
         ├── issue-editor/              # 撰写 GitHub Issue
         ├── markdown-editor/           # Markdown 笔记规范
+        ├── peer-buddy-matcher/        # 公共索引增量巡检与双向搭伙撮合
         ├── pr-editor/                 # 撰写 PR 标题与描述
         └── readme-editor/             # 撰写、重构 README
 ```
@@ -86,7 +90,7 @@ quanttide-academy/
 
 1. 理解需求：明确请求范围，只改被要求的文件
 2. 查契约：读 README 确认入口；新增或改名路径时，读 second-brain.md 确认落点
-3. 匹配技能：写笔记用 `markdown-editor`，改 README 用 `readme-editor`，改本文用 `agents-editor`，写 skill 用 `create-skill`，写 Issue 用 `issue-editor`，写 PR 用 `pr-editor`，飞书工作流用 `feishu-workflows`，职业探索访谈与搭档名片用 `career-discovery-interview`，命中则先读再动手
+3. 匹配技能：写笔记用 `markdown-editor`，改 README 用 `readme-editor`，改本文用 `agents-editor`，写 skill 用 `create-skill`，写 Issue 用 `issue-editor`，写 PR 用 `pr-editor`，飞书工作流用 `feishu-workflows`，职业探索访谈与搭档名片用 `career-discovery-interview`，端侧关键事件反思与困惑闭环用 `cit-reflection`，公共索引巡检与找搭档用 `peer-buddy-matcher`，命中则先读再动手
 4. 检查现状：新建路径时，确认目标路径是否已存在，不预建未使用的目录
 5. 执行操作：skill 放 `.agent/skills/{skill 名}/`；已有正文用相对链接，不抄写
 6. 结构同步：改名或变更目录时，同一轮更新 README「仓库结构」、本文「项目目录」「快速定位」与内部链接
